@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "sourceMap": true,
+    "strict": true,
+    "noImplicitReturns": true,
+    "noImplicitAny": true,
+    "allowJs": true,
+    "moduleResolution": "node",
+    "module": "es6",
+    "target": "es6"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx"]
+}
