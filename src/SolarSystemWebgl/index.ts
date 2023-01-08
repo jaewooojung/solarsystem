@@ -8,6 +8,7 @@ import MainCamera from "./systems/MainCamera";
 import Renderer from "./systems/Renderer";
 import { createScene } from "./systems/scene";
 import Sizes from "./systems/sizes";
+import World from "./World";
 
 class SolarSystemWebgl {
   private sizes: Sizes;
@@ -19,6 +20,7 @@ class SolarSystemWebgl {
   private debugger: Debugger;
   private clock: Clock;
   private previousElapsed = 0;
+  private world: World;
 
   constructor(container: HTMLDivElement) {
     this.scene = createScene();
@@ -32,11 +34,13 @@ class SolarSystemWebgl {
     this.debugger = new Debugger();
     this.clock = new Clock();
     this.scene.add(this.mainCamera.getInstance(), ...this.debugger.getHelpers());
-
     this.onResize();
     window.addEventListener("resize", () => {
       this.onResize();
     });
+    this.world = new World(this.loader);
+    this.world.init();
+    this.scene.add(this.world.getWorld());
   }
 
   onResize = () => {
@@ -56,6 +60,7 @@ class SolarSystemWebgl {
       this.previousElapsed = elapsed;
 
       // tick
+      this.world.tick(elapsed, delta);
       // update
 
       this.mainControl.update();
