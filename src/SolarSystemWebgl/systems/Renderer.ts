@@ -1,4 +1,4 @@
-import { PerspectiveCamera, Scene, WebGLRenderer } from "three";
+import { PerspectiveCamera, Scene, sRGBEncoding, WebGLRenderer } from "three";
 
 class Renderer {
   private instance: WebGLRenderer;
@@ -7,8 +7,16 @@ class Renderer {
 
   constructor(scene: Scene, mainCameraInstance: PerspectiveCamera) {
     this.instance = new WebGLRenderer({ antialias: true });
+    this.instance.physicallyCorrectLights = true;
+    this.instance.outputEncoding = sRGBEncoding;
+    // this.instance.shadowMap.enabled = true;
     this.scene = scene;
     this.mainCameraInstance = mainCameraInstance;
+    // renderer.shadowMap.enabled = true;
+    // renderer.shadowMap.type = PCFShadowMap;
+    // renderer.physicallyCorrectLights = true;
+    // renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    // renderer.toneMappingExposure = 1;
   }
 
   getInstance() {

@@ -1,7 +1,19 @@
-import { AmbientLight, Group, Mesh, MeshBasicMaterial, MeshPhysicalMaterial, SphereGeometry } from "three";
+import {
+  AmbientLight,
+  Group,
+  MathUtils,
+  Mesh,
+  MeshBasicMaterial,
+  MeshPhysicalMaterial,
+  PointLight,
+  PointLightHelper,
+  SphereGeometry,
+} from "three";
 import { Tick } from "../../types";
 import Loder from "../systems/Loader";
-import createStars from "./createStars";
+import { createOrbitLine } from "./orbits/v1";
+import createStars from "./stars/createStars";
+import { getStarDatas } from "./stars/datas";
 
 class World {
   private instance: Group;
@@ -24,26 +36,42 @@ class World {
   }
 
   init = async () => {
-    const starModels = await createStars(this.loader);
+    // Stars
+    const starDatas = getStarDatas(true);
+    const starModels = await createStars(this.loader, starDatas);
     this.instance.add(...starModels);
-    const [sun, mercury, venus, earth, mars, jupiter, saturn] = starModels;
-    const obj: any = {};
-    starModels.forEach((s) => (obj[s.name] = s));
-    this.stars = obj;
-    const sunTick: Tick = (elapsed, delta) => {
-      this.stars.sun.rotateY(elapsed * 0.001);
-    };
-    this.updatables.push(sunTick);
-    // const ge = new SphereGeometry(1,16,16);
-    // const ma = new MeshBasicMaterial();
-    // const mesh = new Mesh(ge, ma)
 
-    const light = new AmbientLight("white", 10);
-    light.position.set(10, 10, 10);
+    // Light
+    const light = new AmbientLight("white", 3);
     this.instance.add(light);
+
+    // Orbit
+    const orbitLines = createOrbitLine(starDatas);
+    this.instance.add(...orbitLines);
+
+    const selfRotation: Tick = (elapsed, delta) => {
+      starModels.forEach((starModel, index) => {
+        starModel.rotateY(((2 * Math.PI) / starDatas[index].period.rotation) * delta * -1); // rotation초마다 한바퀴 (1day => 1second)
+      });
+    };
+    const orbitRotation: Tick = (elapsed, delta) => {
+      starModels.forEach((starModel, index) => {
+        if (index === 0) {
+          return;
+        }
+        const orbitRadian = starDatas[index].orbitalRotaionRadianPerSceond! * elapsed;
+        // orbital초마다 한바퀴 (1day => 1second)
+        const positionX = Math.sin(orbitRadian) * starDatas[index].distanceToSun;
+        starModel.position.x = positionX;
+        starModel.position.z = Math.cos(orbitRadian) * starDatas[index].distanceToSun;
+        starModel.position.y = positionX * starDatas[index].maxTanY!;
+      });
+    };
+    this.updatables.push(selfRotation, orbitRotation);
   };
 
   getWorld = () => this.instance;
+
   tick: Tick = (elapsed, delta) => {
     this.updatables.forEach((t) => t(elapsed, delta));
   };
