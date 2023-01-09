@@ -1,13 +1,20 @@
 import { MathUtils } from "three";
 import { Star } from "../../../types";
 
-export const UNIT = 6378.1; // km. earth 반지름
+/**
+ * km. 1 UNIT = Earth 반지름.
+ */
+export const UNIT = 6378.1;
 const DAY_SECONDS = 24 * 60 * 60;
-const AU = 150000000; // km
+/**
+ * km
+ */
+const AU = 150000000;
 
 function virtualizeMeasurements(realStarDatas: Array<Star>) {
   const multipliers = {
-    radius: [1, 10, 10, 10, 10, 3, 3],
+    radius: [0.05, 2, 2, 2, 2, 0.3, 0.3],
+    distanceToSun: [0, 0, 0, 0, 0, -65, -150],
     period: {
       orbital: [
         1 / DAY_SECONDS,
@@ -28,22 +35,36 @@ function virtualizeMeasurements(realStarDatas: Array<Star>) {
         50 / DAY_SECONDS,
       ],
     },
-    distanceToSun: [0, 140, 160, 190, 210, 0, -150],
   };
   return realStarDatas.map((s, i) => {
     const newOrbitPeriod = s.period.orbital * multipliers.period.orbital[i];
-    const newDistanceToSun = (s.distanceToSun / AU) * 100 + multipliers.distanceToSun[i];
     return {
       ...s,
       radius: s.radius * multipliers.radius[i],
-      distanceToSun: newDistanceToSun,
-      period: {
-        orbital: newOrbitPeriod,
-        rotation: s.period.rotation * multipliers.period.rotation[i],
-      },
+      distanceToSun: s.distanceToSun / (AU * 0.04) + multipliers.distanceToSun[i],
+      period: { orbital: newOrbitPeriod, rotation: s.period.rotation * multipliers.period.rotation[i] },
       orbitalRotaionRadianPerSceond: (2 * Math.PI) / newOrbitPeriod,
     };
   });
+  // const multipliers = {
+  //   radius: [1, 10, 10, 10, 10, 3, 3],
+
+  //   distanceToSun: [0, 140, 160, 190, 210, 0, -150],
+  // };
+  // return realStarDatas.map((s, i) => {
+  //   const newOrbitPeriod = s.period.orbital * multipliers.period.orbital[i];
+  //   const newDistanceToSun = (s.distanceToSun / AU) * 100 + multipliers.distanceToSun[i];
+  //   return {
+  //     ...s,
+  //     radius: s.radius * multipliers.radius[i],
+  //     distanceToSun: newDistanceToSun,
+  //     period: {
+  //       orbital: newOrbitPeriod,
+  //       rotation: s.period.rotation * multipliers.period.rotation[i],
+  //     },
+  //     orbitalRotaionRadianPerSceond: (2 * Math.PI) / newOrbitPeriod,
+  //   };
+  // });
 }
 
 /**
@@ -129,7 +150,6 @@ const realStarDatas: Array<Star> = [
   },
 ];
 
-// [todo] isVirtualized=false인 경우 실제수치를 최대한 합리적으로 나타내보기
 export function getStarDatas(isVirtualized: boolean) {
   if (isVirtualized) {
     return virtualizeMeasurements(realStarDatas);

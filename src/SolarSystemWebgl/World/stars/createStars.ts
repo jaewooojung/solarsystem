@@ -1,36 +1,38 @@
-import { Mesh, MathUtils } from "three";
+import { Mesh, MathUtils, Texture, SphereGeometry, MeshBasicMaterial, MeshStandardMaterial } from "three";
 import { Star } from "../../../types";
 import Loader from "../../systems/Loader";
 import { UNIT } from "./datas";
 
-function modifyScale(starModels: Array<Mesh>, starDatas: Array<Star>) {
-  starModels.forEach((starModel, index) => {
-    const starData = starDatas.find((sd) => sd.name === starModel.name);
-    starModel.scale.multiplyScalar(starData!.radius / UNIT);
-    starModel.position.x += starData!.distanceToSun;
-  });
-}
-
 export default async function createStars(loader: Loader, starDatas: Array<Star>) {
-  const starModels: Array<Mesh> = await Promise.all(
-    starDatas.map(async (sd) => {
-      return await loader
-        .getGltfLoader()
-        .loadAsync(`/gltf/${sd.name}.glb`)
-        .then((gltf) => {
-          if (gltf.scene.children.length > 1) {
-            const [ringTop, ringBotton, core] = gltf.scene.children;
-            core.add(ringTop, ringBotton);
-            core.name = "saturn";
-            return core as Mesh;
-          } else {
-            return gltf.scene.children[0] as Mesh;
-          }
-        });
-    })
-  );
+  const promises = [
+    ...starDatas.map(async (sd) => {
+      return await loader.getTextureLoader().loadAsync(`/textures/bigStars/${sd.name}.jpg`);
+    }),
+    await loader.getTextureLoader().loadAsync(`/textures/bigStars/earth-normal.jpg`),
+    await loader.getTextureLoader().loadAsync(`/textures/bigStars/earth-cloud.jpg`),
+    await loader.getTextureLoader().loadAsync(`/textures/bigStars/earth-specular.jpg`),
+    await loader.getTextureLoader().loadAsync(`/textures/bigStars/saturn-ring.jpg`),
+  ];
+  const textures: Array<Texture> = await Promise.all(promises);
 
-  modifyScale(starModels, starDatas);
+  console.log(textures);
 
-  return starModels;
+  const getGeometry = (radius: number) => {
+    return new SphereGeometry(radius, 32, 32);
+  };
+  const getMaterial = (texture: Texture) => {
+    return new MeshStandardMaterial({
+      map: texture,
+    });
+  };
+
+  const stars = starDatas.map((sd, index) => {
+    const radius = sd.radius / UNIT;
+    const star: Mesh = new Mesh(getGeometry(radius), getMaterial(textures[index]));
+    star.position.x += sd.distanceToSun;
+    return star;
+  });
+
+  console.log(stars);
+  return stars;
 }

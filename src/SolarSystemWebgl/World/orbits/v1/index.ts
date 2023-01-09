@@ -6,7 +6,7 @@ function createOrbitLine(starDatas: Array<Star>) {
     color: "white",
   });
   const createEachOribitLine = (starData: Star) => {
-    const geometry = new RingGeometry(starData.distanceToSun, starData.distanceToSun + 1, 128, 2);
+    const geometry = new RingGeometry(starData.distanceToSun, starData.distanceToSun + 0.05, 128, 2);
     const mesh = new Mesh(geometry, material);
     mesh.rotateX(-Math.PI * 0.5);
     mesh.rotateY(-MathUtils.degToRad(starData.inclinationFromSun));

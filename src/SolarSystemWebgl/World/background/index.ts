@@ -35,7 +35,7 @@ async function createBackground(loader: Loader) {
   };
   const getMaterial = (alphaNum: number, color: string) =>
     new PointsMaterial({
-      size: 10,
+      size: 50,
       fog: false,
       color,
       sizeAttenuation: true,
