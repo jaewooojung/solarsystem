@@ -11,6 +11,7 @@ import {
 } from "three";
 import { Tick } from "../../types";
 import Loder from "../systems/Loader";
+import { createBackground } from "./background";
 import { createOrbitLine } from "./orbits/v1";
 import createStars from "./stars/createStars";
 import { getStarDatas } from "./stars/datas";
@@ -68,6 +69,10 @@ class World {
       });
     };
     this.updatables.push(selfRotation, orbitRotation);
+
+    // Background
+    const background = await createBackground(this.loader);
+    this.instance.add(background);
   };
 
   getWorld = () => this.instance;
