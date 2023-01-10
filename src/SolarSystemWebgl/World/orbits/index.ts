@@ -1,5 +1,5 @@
 import { MathUtils, Mesh, MeshBasicMaterial, RingGeometry } from "three";
-import { Star } from "../../../../types";
+import { Star } from "../../../types";
 
 function createOrbitLine(starDatas: Array<Star>) {
   const material = new MeshBasicMaterial({

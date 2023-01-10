@@ -9,6 +9,7 @@ import {
   RingGeometry,
   DoubleSide,
   ObjectSpaceNormalMap,
+  Fog,
 } from "three";
 import { Star } from "../../../types";
 import Loader from "../../systems/Loader";
@@ -33,6 +34,8 @@ export default async function createStars(loader: Loader, starDatas: Array<Star>
     const isEarth = star.name === "earth";
     const baseOptions = {
       map: texture,
+      roughness: 1,
+      metalness: 0.3,
     };
     const earthOptions = {
       map: texture,
@@ -50,6 +53,7 @@ export default async function createStars(loader: Loader, starDatas: Array<Star>
       side: DoubleSide,
     });
     const ring = new Mesh(ringGeometry, ringMaterial);
+    ring.name = "saturn";
     ring.rotateX(-Math.PI / 2);
     saturn.add(ring);
   };
@@ -61,9 +65,9 @@ export default async function createStars(loader: Loader, starDatas: Array<Star>
     if (sd.name === "saturn") {
       addRing(star, radius);
     }
+    star.name = sd.name;
     return star;
   });
 
-  console.log(stars);
   return stars;
 }
