@@ -1,8 +1,8 @@
-import GUI from "lil-gui";
 import { BufferGeometry, BufferAttribute, PointsMaterial, Points, Group } from "three";
 import Loader from "../../systems/Loader";
 
 const ALPHA_MAPS_NAME = [0, 1, 2, 3, 4, 5];
+const COLORS = ["#ffffff", "#b54731", "#f5d442", "#ebc7bc", "#f2dbff", "#bdba31"];
 
 async function createBackground(loader: Loader) {
   const parameters = {
@@ -44,8 +44,7 @@ async function createBackground(loader: Loader) {
       alphaTest: 0.01,
       depthTest: true,
     });
-  const colors = ["#ffffff", "#b54731", "#f5d442", "#ebc7bc", "#f2dbff", "#bdba31"];
-  const backgrounds = ALPHA_MAPS_NAME.map((n, i) => new Points(getGeometry(), getMaterial(n, colors[i])));
+  const backgrounds = ALPHA_MAPS_NAME.map((n, i) => new Points(getGeometry(), getMaterial(n, COLORS[i])));
   const group = new Group();
   group.add(...backgrounds);
   return group;

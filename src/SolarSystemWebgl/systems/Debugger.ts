@@ -1,12 +1,13 @@
+import { AxesHelper } from "three";
 import GUI from "lil-gui";
 import * as Stats from "stats.js";
-import { AxesHelper } from "three";
 
 class Debugger {
+  private static instance: Debugger;
   private gui: GUI;
   private axesHelper: AxesHelper;
   private stats: any;
-  constructor() {
+  private constructor() {
     this.gui = new GUI();
     this.axesHelper = new AxesHelper(100);
     const tick = () => {
@@ -16,6 +17,24 @@ class Debugger {
     this.stats = new Stats();
     this.stats.showPanel(0);
     document.body.appendChild(this.stats.dom);
+  }
+  /**
+   * initialize in root.
+   */
+  static init() {
+    if (!Debugger.instance) {
+      Debugger.instance = new Debugger();
+    }
+  }
+  /**
+   * get the instance. no initialization.
+   */
+  static getInstance() {
+    if (Debugger.instance) {
+      return Debugger.instance;
+    } else {
+      throw new Error("You should initialize the instance. call 'Debugger.init()' first");
+    }
   }
   getGUI() {
     return this.gui;

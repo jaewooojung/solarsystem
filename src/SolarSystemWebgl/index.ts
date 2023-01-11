@@ -1,7 +1,7 @@
-import { Clock, Raycaster, Scene, Vector2 } from "three";
+import { Clock, Scene } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
-import Element2D from "./Element2D";
 
+import Element2D from "./Element2D";
 import { createOrbitContols } from "./systems/control";
 import Cursor from "./systems/Cursor";
 import Debugger from "./systems/Debugger";
@@ -20,33 +20,30 @@ class SolarSystemWebgl {
   private cursor: Cursor;
   private mainControl: OrbitControls;
   private renderer: Renderer;
-  private debugger: Debugger;
+  private world: World;
   private clock: Clock;
   private previousElapsed = 0;
-  private element2D: Element2D;
-  private world: World;
 
   constructor(container: HTMLDivElement) {
     this.scene = createScene();
     this.sizes = new Sizes(container);
-    this.element2D = new Element2D(this.sizes, container);
+    Element2D.init(this.sizes, container);
+    Debugger.init();
     this.mainCamera = new MainCamera(this.sizes);
-    this.cursor = new Cursor(this.sizes, this.mainCamera.getInstance(), container);
     this.renderer = new Renderer(this.scene, this.mainCamera.getInstance());
-    this.loader = new Loader();
     const canvas = this.renderer.getInstance().domElement;
     container.append(canvas);
     this.mainControl = createOrbitContols(this.mainCamera.getInstance(), canvas);
-    this.debugger = new Debugger();
+    this.loader = new Loader();
+    this.cursor = new Cursor(this.sizes, this.mainCamera.getInstance(), container, this.mainControl);
+    this.world = new World(this.loader, this.cursor);
+    this.world.init();
+    this.scene.add(this.mainCamera.getInstance(), this.world.getWorld());
     this.clock = new Clock();
-    this.scene.add(this.mainCamera.getInstance());
     this.onResize();
     window.addEventListener("resize", () => {
       this.onResize();
     });
-    this.world = new World(this.loader, this.cursor, this.element2D);
-    this.world.init();
-    this.scene.add(this.world.getWorld());
   }
 
   onResize = () => {
@@ -67,10 +64,10 @@ class SolarSystemWebgl {
 
       // tick
       this.world.tick(elapsed, delta);
-      // update
 
-      // this.mainControl.update();
-      this.debugger.getStats().update();
+      // update
+      this.mainControl.update();
+      Debugger.getInstance().getStats().update();
 
       this.render();
     });

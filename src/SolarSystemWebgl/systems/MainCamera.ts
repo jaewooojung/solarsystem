@@ -5,7 +5,7 @@ class MainCamera {
   private instance: PerspectiveCamera;
   constructor(sizes: Sizes) {
     const { width, height } = sizes.getSizes();
-    this.instance = new PerspectiveCamera(75, width / height, 0.001, 10000);
+    this.instance = new PerspectiveCamera(75, width / height, 1, 10000);
     this.instance.position.set(10, 10, 10);
   }
   getInstance() {

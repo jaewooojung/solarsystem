@@ -1,12 +1,4 @@
-import {
-  ACESFilmicToneMapping,
-  CineonToneMapping,
-  LinearToneMapping,
-  PerspectiveCamera,
-  Scene,
-  sRGBEncoding,
-  WebGLRenderer,
-} from "three";
+import { CineonToneMapping, PerspectiveCamera, Scene, sRGBEncoding, WebGLRenderer } from "three";
 
 class Renderer {
   private instance: WebGLRenderer;

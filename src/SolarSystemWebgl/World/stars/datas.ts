@@ -2,7 +2,7 @@ import { MathUtils } from "three";
 import { Star } from "../../../types";
 
 /**
- * km. 1 UNIT = Earth 반지름.
+ * 1 UNIT = Radius of Earth(km).
  */
 export const UNIT = 6378.1;
 const DAY_SECONDS = 24 * 60 * 60;
@@ -43,28 +43,9 @@ function virtualizeMeasurements(realStarDatas: Array<Star>) {
       radius: s.radius * multipliers.radius[i],
       distanceToSun: s.distanceToSun / (AU * 0.04) + multipliers.distanceToSun[i],
       period: { orbital: newOrbitPeriod, rotation: s.period.rotation * multipliers.period.rotation[i] },
-      orbitalRotaionRadianPerSceond: (2 * Math.PI) / newOrbitPeriod,
+      orbitalRotaionRadianPerSecond: (2 * Math.PI) / newOrbitPeriod,
     };
   });
-  // const multipliers = {
-  //   radius: [1, 10, 10, 10, 10, 3, 3],
-
-  //   distanceToSun: [0, 140, 160, 190, 210, 0, -150],
-  // };
-  // return realStarDatas.map((s, i) => {
-  //   const newOrbitPeriod = s.period.orbital * multipliers.period.orbital[i];
-  //   const newDistanceToSun = (s.distanceToSun / AU) * 100 + multipliers.distanceToSun[i];
-  //   return {
-  //     ...s,
-  //     radius: s.radius * multipliers.radius[i],
-  //     distanceToSun: newDistanceToSun,
-  //     period: {
-  //       orbital: newOrbitPeriod,
-  //       rotation: s.period.rotation * multipliers.period.rotation[i],
-  //     },
-  //     orbitalRotaionRadianPerSceond: (2 * Math.PI) / newOrbitPeriod,
-  //   };
-  // });
 }
 
 /**
@@ -80,7 +61,7 @@ const realStarDatas: Array<Star> = [
       rotation: 27 * DAY_SECONDS,
     },
     radius: 696340,
-    maxTanY: Math.tan(MathUtils.degToRad(0)),
+    tangent_inclinationFromSun: Math.tan(MathUtils.degToRad(0)),
   },
   {
     name: "mercury",
@@ -91,7 +72,7 @@ const realStarDatas: Array<Star> = [
       rotation: 58.646 * DAY_SECONDS,
     },
     radius: 2439.7,
-    maxTanY: Math.tan(MathUtils.degToRad(3.38)),
+    tangent_inclinationFromSun: Math.tan(MathUtils.degToRad(3.38)),
   },
   {
     name: "venus",
@@ -102,7 +83,7 @@ const realStarDatas: Array<Star> = [
       rotation: 243.019 * DAY_SECONDS,
     },
     radius: 6051.85,
-    maxTanY: Math.tan(MathUtils.degToRad(3.394)),
+    tangent_inclinationFromSun: Math.tan(MathUtils.degToRad(3.394)),
   },
   {
     name: "earth",
@@ -113,7 +94,7 @@ const realStarDatas: Array<Star> = [
       rotation: 1 * DAY_SECONDS,
     },
     radius: UNIT,
-    maxTanY: Math.tan(MathUtils.degToRad(7.25)),
+    tangent_inclinationFromSun: Math.tan(MathUtils.degToRad(7.25)),
   },
   {
     name: "mars",
@@ -124,7 +105,7 @@ const realStarDatas: Array<Star> = [
       rotation: 1.026 * DAY_SECONDS,
     },
     radius: 3389.5,
-    maxTanY: Math.tan(MathUtils.degToRad(5.65)),
+    tangent_inclinationFromSun: Math.tan(MathUtils.degToRad(5.65)),
   },
   {
     name: "jupiter",
@@ -135,7 +116,7 @@ const realStarDatas: Array<Star> = [
       rotation: 0.414 * DAY_SECONDS,
     },
     radius: 69911,
-    maxTanY: Math.tan(MathUtils.degToRad(6.09)),
+    tangent_inclinationFromSun: Math.tan(MathUtils.degToRad(6.09)),
   },
   {
     name: "saturn",
@@ -146,7 +127,7 @@ const realStarDatas: Array<Star> = [
       rotation: 0.444 * DAY_SECONDS,
     },
     radius: 60268,
-    maxTanY: Math.tan(MathUtils.degToRad(5.51)),
+    tangent_inclinationFromSun: Math.tan(MathUtils.degToRad(5.51)),
   },
 ];
 

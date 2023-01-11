@@ -1,9 +1,10 @@
-import { MathUtils, Mesh, MeshBasicMaterial, RingGeometry } from "three";
+import { DoubleSide, MathUtils, Mesh, MeshBasicMaterial, RingGeometry } from "three";
 import { Star } from "../../../types";
 
 function createOrbitLine(starDatas: Array<Star>) {
   const material = new MeshBasicMaterial({
     color: "white",
+    side: DoubleSide,
   });
   const createEachOribitLine = (starData: Star) => {
     const geometry = new RingGeometry(starData.distanceToSun, starData.distanceToSun + 0.05, 128, 2);

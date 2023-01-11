@@ -9,6 +9,6 @@ export type Star = {
     rotation: number; // 자전주기 // second
   };
   radius: number; // km. multiplyScalar 하는데에만 쓰이며 코드에서는 distanceToSun 거리를 기준으로 연산함
-  maxTanY: number;
-  orbitalRotaionRadianPerSceond?: number;
+  tangent_inclinationFromSun: number;
+  orbitalRotaionRadianPerSecond?: number;
 };

@@ -1,21 +1,9 @@
-import {
-  Mesh,
-  MathUtils,
-  Texture,
-  SphereGeometry,
-  MeshBasicMaterial,
-  MeshStandardMaterial,
-  Vector2,
-  RingGeometry,
-  DoubleSide,
-  ObjectSpaceNormalMap,
-  Fog,
-} from "three";
-import { Star } from "../../../types";
+import { Mesh, Texture, SphereGeometry, MeshStandardMaterial, RingGeometry, DoubleSide } from "three";
 import Loader from "../../systems/Loader";
 import { UNIT } from "./datas";
+import { Star } from "../../../types";
 
-export default async function createStars(loader: Loader, starDatas: Array<Star>) {
+export default async function createStars(starDatas: Array<Star>, loader: Loader) {
   const promises = [
     ...starDatas.map(async (sd) => {
       return await loader.getTextureLoader().loadAsync(`/textures/bigStars/${sd.name}.jpg`);
@@ -62,6 +50,7 @@ export default async function createStars(loader: Loader, starDatas: Array<Star>
     const radius = sd.radius / UNIT;
     const star: Mesh = new Mesh(getGeometry(radius), getMaterial(sd, textures[index]));
     star.position.x += sd.distanceToSun;
+    star.userData = sd;
     if (sd.name === "saturn") {
       addRing(star, radius);
     }
