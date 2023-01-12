@@ -1,14 +1,14 @@
 import { BufferGeometry, BufferAttribute, PointsMaterial, Points, Group, Texture } from "three";
-import Loader from "../../systems/singletons/Loader";
+import Loader from "../../systems/Loader";
 
 const COLORS = ["#ffffff", "#b54731", "#f5d442", "#ebc7bc", "#f2dbff", "#bdba31"];
 
-async function createBackground() {
+export default function createBackground(loader: Loader) {
   const parameters = {
     count: 50,
     radius: 2000,
   };
-  const textures = Loader.getInstance().getTextures().smallStars;
+  const textures = loader.getTextures().smallStars;
 
   const getRandomPositions = () => {
     const positions = new Float32Array(parameters.count * 3);
@@ -45,5 +45,3 @@ async function createBackground() {
   group.add(...backgrounds);
   return group;
 }
-
-export { createBackground };

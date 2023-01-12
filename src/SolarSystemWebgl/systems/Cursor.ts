@@ -2,11 +2,10 @@ import { Mesh, PerspectiveCamera, Raycaster, Vector2, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import gsap from "gsap";
 
-import Element2D from "../../Element2D";
-import Sizes from "../Sizes";
+import Element2D from "../Element2D";
+import Sizes from "./Sizes";
 
 class Cursor {
-  private static instance: Cursor;
   private coordinate: Vector2;
   private raycaster: Raycaster;
   private camera: PerspectiveCamera;
@@ -15,12 +14,13 @@ class Cursor {
   private isAnimating: boolean;
   private element2D: Element2D;
 
-  private constructor(
+  constructor(
     sizes: Sizes,
     camera: PerspectiveCamera,
     controls: OrbitControls,
     container: HTMLDivElement,
-    startLoop: () => void
+    onClickStart: () => void,
+    element2D: Element2D
   ) {
     this.coordinate = new Vector2(2, 2); // 초기값: 화면 밖.
     this.raycaster = new Raycaster();
@@ -28,7 +28,7 @@ class Cursor {
     this.hovered = null;
     this.clicked = null;
     this.isAnimating = false;
-    this.element2D = Element2D.getInstance();
+    this.element2D = element2D;
 
     container.addEventListener("mousemove", (event) => {
       const { width, height } = sizes.getSizes();
@@ -42,6 +42,7 @@ class Cursor {
         return;
       }
       if (this.hovered) {
+        this.clicked = this.hovered.name === "saturnRing" ? (this.hovered.parent as Mesh) : this.hovered;
         gsap
           .timeline({
             defaults: {
@@ -50,7 +51,6 @@ class Cursor {
               onStart: () => {
                 this.isAnimating = true;
                 controls.enabled = false;
-                this.clicked = this.hovered;
                 this.removeHovered();
                 this.element2D.showDesc(this.clicked!);
               },
@@ -62,11 +62,16 @@ class Cursor {
             },
           })
           .to(controls.target, {
-            x: this.hovered.position.x,
-            y: this.hovered.position.y,
-            z: this.hovered.position.z,
+            x: this.clicked.position.x,
+            y: this.clicked.position.y,
+            z: this.clicked.position.z,
           });
       }
+    });
+    const progress = this.element2D.getIntro().children[0];
+    progress.addEventListener("click", (event) => {
+      this.element2D.removeIntro();
+      onClickStart();
     });
 
     this.element2D.getDescOuter().addEventListener("click", (event) => {
@@ -81,7 +86,7 @@ class Cursor {
 
     this.element2D.getProgress().addEventListener("click", (event) => {
       this.element2D.getIntro().remove();
-      startLoop();
+      onClickStart();
       gsap.timeline({}).to(this.camera.position, {
         duration: 2,
         x: 20,
@@ -89,30 +94,6 @@ class Cursor {
         z: 20,
       });
     });
-  }
-
-  static init(
-    sizes: Sizes,
-    camera: PerspectiveCamera,
-    controls: OrbitControls,
-    container: HTMLDivElement,
-    startLoop: () => void
-  ) {
-    if (!Cursor.instance) {
-      Cursor.instance = new Cursor(sizes, camera, controls, container, startLoop);
-    }
-  }
-  /**
-   * get the instance. no initialization.
-   */
-  static getInstance() {
-    if (Cursor.instance) {
-      return Cursor.instance;
-    } else {
-      throw new Error(
-        "You should initialize the instance. call 'Cursor.init(sizes, camera, controls, container)' first"
-      );
-    }
   }
 
   getHovered = () => this.hovered;

@@ -5,16 +5,12 @@ import createIntro from "./intro";
 import createTooltip from "./tooltip";
 import "./styles/index.css";
 
-/**
- * singleton
- */
 class Element2D {
-  private static instance: Element2D;
   private sizes: Sizes;
   private intro: HTMLDivElement;
   private tooltip: HTMLDivElement;
   private desc: HTMLDivElement;
-  private constructor(sizes: Sizes, container: HTMLDivElement) {
+  constructor(sizes: Sizes, container: HTMLDivElement) {
     this.sizes = sizes;
 
     // loading
@@ -29,24 +25,7 @@ class Element2D {
     this.desc = createDescription();
     container!.append(this.desc);
   }
-  /**
-   * initialize in root.
-   */
-  static init(sizes: Sizes, container: HTMLDivElement) {
-    if (!Element2D.instance) {
-      Element2D.instance = new Element2D(sizes, container);
-    }
-  }
-  /**
-   * get the instance. no initialization.
-   */
-  static getInstance() {
-    if (Element2D.instance) {
-      return Element2D.instance;
-    } else {
-      throw new Error("You should initialize the instance. call 'Element2D.init(sizes, container)' first");
-    }
-  }
+
   getIntro = () => this.intro;
 
   getProgress = () => this.intro.children[0];
@@ -92,6 +71,8 @@ class Element2D {
   hideIntro = () => {
     this.intro.style.display = "none";
   };
+
+  removeIntro = () => this.intro.remove();
 }
 
 export default Element2D;

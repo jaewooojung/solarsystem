@@ -1,31 +1,32 @@
 import { AmbientLight, Group, Mesh, PointLight, PointLightHelper, Vector3 } from "three";
-import Cursor from "../systems/singletons/Cursor";
+import Cursor from "../systems/Cursor";
 import createStars from "./stars/createStars";
-import { createOrbitLine } from "./orbits";
-import { createBackground } from "./background";
+import createOrbitLine from "./orbits";
+import createBackground from "./background";
 import { getStarDatas } from "./stars/datas";
 import { Tick } from "../../types";
-import Loader from "../systems/singletons/Loader";
+import Loader from "../systems/Loader";
 
 class World {
   private instance: Group;
+  private loader: Loader;
   private cursor: Cursor;
   private updatables: Array<Tick>;
 
-  constructor() {
+  constructor(loader: Loader, cursor: Cursor) {
     this.instance = new Group();
-    this.cursor = Cursor.getInstance();
+    this.loader = loader;
+    this.cursor = cursor;
     this.updatables = [];
   }
 
   init = async () => {
     // texture Loading
-    await Loader.getInstance().load();
-
-    const starDatas = getStarDatas(true);
+    await this.loader.load();
 
     // Stars
-    const { stars, starsTick } = await createStars(starDatas);
+    const starDatas = getStarDatas(true);
+    const { stars, starsTick } = createStars(starDatas, this.loader);
     this.instance.add(...stars);
     this.updatables.push(starsTick);
 
@@ -37,7 +38,7 @@ class World {
     this.instance.add(...orbitLines);
 
     // Background
-    const background = await createBackground();
+    const background = createBackground(this.loader);
     this.instance.add(background);
 
     // Light

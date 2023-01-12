@@ -1,7 +1,7 @@
 import { DoubleSide, MathUtils, Mesh, MeshBasicMaterial, RingGeometry } from "three";
 import { StarData } from "../../../types";
 
-function createOrbitLine(starDatas: Array<StarData>) {
+export default function createOrbitLine(starDatas: Array<StarData>) {
   const material = new MeshBasicMaterial({
     color: "white",
     side: DoubleSide,
@@ -16,5 +16,3 @@ function createOrbitLine(starDatas: Array<StarData>) {
   const orbitLines = starDatas.slice(1).map((sd) => createEachOribitLine(sd));
   return orbitLines;
 }
-
-export { createOrbitLine };

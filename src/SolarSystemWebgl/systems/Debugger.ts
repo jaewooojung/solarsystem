@@ -19,24 +19,15 @@ class Debugger {
     };
     this.stats = new Stats();
     this.stats.showPanel(0);
-    document.body.appendChild(this.stats.dom);
+    document.body.append(this.stats.dom);
   }
-  /**
-   * initialize in root.
-   */
-  static init() {
-    if (!Debugger.instance) {
-      Debugger.instance = new Debugger();
-    }
-  }
-  /**
-   * get the instance. no initialization.
-   */
+
   static getInstance() {
-    if (Debugger.instance) {
-      return Debugger.instance;
+    if (this.instance) {
+      return this.instance;
     } else {
-      throw new Error("You should initialize the instance. call 'Debugger.init()' first");
+      this.instance = new Debugger();
+      return this.instance;
     }
   }
   getGUI() {

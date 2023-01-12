@@ -1,12 +1,11 @@
 import { Clock, Scene } from "three";
-import gsap from "gsap";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import Element2D from "./Element2D";
 import { createOrbitContols } from "./systems/control";
-import Cursor from "./systems/singletons/Cursor";
-import Debugger from "./systems/singletons/Debugger";
-import Loader from "./systems/singletons/Loader";
+import Cursor from "./systems/Cursor";
+import Debugger from "./systems/Debugger";
+import Loader from "./systems/Loader";
 import MainCamera from "./systems/MainCamera";
 import Renderer from "./systems/Renderer";
 import { createScene } from "./systems/scene";
@@ -24,18 +23,25 @@ class SolarSystemWebgl {
   private previousElapsed = 0;
 
   constructor(container: HTMLDivElement) {
-    Loader.init();
-    Debugger.init();
     this.scene = createScene();
+    const loader = new Loader();
     this.sizes = new Sizes(container);
-    Element2D.init(this.sizes, container);
+    const element2D = new Element2D(this.sizes, container);
+
     this.mainCamera = new MainCamera(this.sizes);
     this.renderer = new Renderer(this.scene, this.mainCamera.getCamera());
     const canvas = this.renderer.getRenderer().domElement;
     container.append(canvas);
     this.mainControl = createOrbitContols(this.mainCamera.getCamera(), canvas);
-    Cursor.init(this.sizes, this.mainCamera.getCamera(), this.mainControl, container, this.startLoop);
-    this.world = new World();
+    const cursor = new Cursor(
+      this.sizes,
+      this.mainCamera.getCamera(),
+      this.mainControl,
+      container,
+      this.onClickStart,
+      element2D
+    );
+    this.world = new World(loader, cursor);
     this.world.init();
     this.scene.add(this.mainCamera.getCamera(), this.world.getWorld(), ...Debugger.getInstance().getHelpers());
 
@@ -57,7 +63,7 @@ class SolarSystemWebgl {
     this.renderer.render();
   };
 
-  startLoop = () => {
+  onClickStart = () => {
     this.renderer.getRenderer().setAnimationLoop(() => {
       const elapsed = this.clock.getElapsedTime();
       const delta = elapsed - this.previousElapsed;

@@ -1,20 +1,10 @@
 import { Mesh, Texture, SphereGeometry, MeshStandardMaterial, RingGeometry, DoubleSide } from "three";
-import Loader from "../../systems/singletons/Loader";
+import Loader from "../../systems/Loader";
 import { UNIT } from "./datas";
 import { StarData, Tick } from "../../../types";
 
-export default async function createStars(starDatas: Array<StarData>) {
-  // const promises = [
-  //   ...starDatas.map(async (sd) => {
-  //     return await loader.getTextureLoader().loadAsync(`/texStures/bigStars/${sd.name}.jpg`);
-  //   }),
-  //   await loader.getTextureLoader().loadAsync(`/textures/bigStars/earth-normal.jpg`),
-  //   await loader.getTextureLoader().loadAsync(`/textures/bigStars/earth-specular.jpg`),
-  //   await loader.getTextureLoader().loadAsync(`/textures/bigStars/saturn-ring.jpg`),
-  // ];
-  // const textures: Array<Texture> = await Promise.all(promises);
-
-  const textures = Loader.getInstance().getTextures().bigStars;
+export default function createStars(starDatas: Array<StarData>, loader: Loader) {
+  const textures = loader.getTextures().bigStars;
 
   const getGeometry = (radius: number) => {
     return new SphereGeometry(radius, 32, 32);
@@ -42,7 +32,7 @@ export default async function createStars(starDatas: Array<StarData>) {
       side: DoubleSide,
     });
     const ring = new Mesh(ringGeometry, ringMaterial);
-    ring.name = "saturn";
+    ring.name = "saturnRing";
     ring.rotateX(-Math.PI / 2);
     saturn.add(ring);
   };

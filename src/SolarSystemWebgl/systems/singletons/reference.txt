@@ -1,3 +1,0 @@
-These classes are singleton system classes.
-
-Once initialized in the root, these can be used anywhere in the application.
