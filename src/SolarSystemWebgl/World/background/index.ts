@@ -1,19 +1,15 @@
-import { BufferGeometry, BufferAttribute, PointsMaterial, Points, Group } from "three";
-import Loader from "../../systems/Loader";
+import { BufferGeometry, BufferAttribute, PointsMaterial, Points, Group, Texture } from "three";
+import Loader from "../../systems/singletons/Loader";
 
-const ALPHA_MAPS_NAME = [0, 1, 2, 3, 4, 5];
 const COLORS = ["#ffffff", "#b54731", "#f5d442", "#ebc7bc", "#f2dbff", "#bdba31"];
 
-async function createBackground(loader: Loader) {
+async function createBackground() {
   const parameters = {
     count: 50,
     radius: 2000,
   };
-  const textures = await Promise.all(
-    ALPHA_MAPS_NAME.map(async (n) => {
-      return await loader.getTextureLoader().loadAsync(`/textures/smallStars/${n}.png`);
-    })
-  );
+  const textures = Loader.getInstance().getTextures().smallStars;
+
   const getRandomPositions = () => {
     const positions = new Float32Array(parameters.count * 3);
     for (let i = 0; i < parameters.count; i++) {
@@ -33,18 +29,18 @@ async function createBackground(loader: Loader) {
     geometry.setAttribute("position", new BufferAttribute(getRandomPositions(), 3));
     return geometry;
   };
-  const getMaterial = (alphaNum: number, color: string) =>
+  const getMaterial = (texture: Texture, color: string) =>
     new PointsMaterial({
       size: 50,
       fog: false,
       color,
       sizeAttenuation: true,
-      alphaMap: textures[alphaNum],
+      alphaMap: texture,
       transparent: true,
       alphaTest: 0.01,
       depthTest: true,
     });
-  const backgrounds = ALPHA_MAPS_NAME.map((n, i) => new Points(getGeometry(), getMaterial(n, COLORS[i])));
+  const backgrounds = textures.map((t, i) => new Points(getGeometry(), getMaterial(t, COLORS[i])));
   const group = new Group();
   group.add(...backgrounds);
   return group;

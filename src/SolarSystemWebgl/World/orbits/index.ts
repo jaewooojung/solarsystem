@@ -1,12 +1,12 @@
 import { DoubleSide, MathUtils, Mesh, MeshBasicMaterial, RingGeometry } from "three";
-import { Star } from "../../../types";
+import { StarData } from "../../../types";
 
-function createOrbitLine(starDatas: Array<Star>) {
+function createOrbitLine(starDatas: Array<StarData>) {
   const material = new MeshBasicMaterial({
     color: "white",
     side: DoubleSide,
   });
-  const createEachOribitLine = (starData: Star) => {
+  const createEachOribitLine = (starData: StarData) => {
     const geometry = new RingGeometry(starData.distanceToSun, starData.distanceToSun + 0.05, 128, 2);
     const mesh = new Mesh(geometry, material);
     mesh.rotateX(-Math.PI * 0.5);

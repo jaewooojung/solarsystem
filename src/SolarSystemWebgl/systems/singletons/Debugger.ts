@@ -12,7 +12,7 @@ class Debugger {
   private stats: any;
   private constructor() {
     this.gui = new GUI();
-    this.axesHelper = new AxesHelper(100);
+    this.axesHelper = new AxesHelper(1000);
     const tick = () => {
       this.stats.update();
       requestAnimationFrame(tick);

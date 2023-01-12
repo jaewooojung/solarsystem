@@ -1,6 +1,9 @@
 import { Mesh, Vector3 } from "three";
 import Sizes from "../systems/Sizes";
-import "./styles.css";
+import createDescription from "./description";
+import createIntro from "./intro";
+import createTooltip from "./tooltip";
+import "./styles/index.css";
 
 /**
  * singleton
@@ -8,46 +11,23 @@ import "./styles.css";
 class Element2D {
   private static instance: Element2D;
   private sizes: Sizes;
+  private intro: HTMLDivElement;
   private tooltip: HTMLDivElement;
-  private tooltipText: HTMLDivElement;
   private desc: HTMLDivElement;
-  private descOuter: HTMLDivElement;
-  private descInner: HTMLDivElement;
   private constructor(sizes: Sizes, container: HTMLDivElement) {
     this.sizes = sizes;
 
+    // loading
+    this.intro = createIntro();
+    container!.append(this.intro);
+
     // tooltip
-    const tooltipDiv = document.createElement("div");
-    tooltipDiv.classList.add("tooltip");
-
-    const tooltipTextDiv = document.createElement("div");
-    tooltipTextDiv.classList.add("tooltip-text");
-    this.tooltipText = tooltipTextDiv;
-
-    const tooltipAniDiv = document.createElement("div");
-    tooltipAniDiv.classList.add("tooltip-animate");
-
-    this.tooltip = tooltipDiv;
-    this.tooltip.append(tooltipTextDiv);
-    this.tooltip.append(tooltipAniDiv);
-
-    container!.append(tooltipDiv);
+    this.tooltip = createTooltip();
+    container!.append(this.tooltip);
 
     // description
-    const descDiv = document.createElement("div");
-    descDiv.classList.add("desc");
-    this.desc = descDiv;
-
-    const descOuterDiv = document.createElement("div");
-    descOuterDiv.classList.add("desc-outer");
-    this.descOuter = descOuterDiv;
-
-    const descInnerDiv = document.createElement("div");
-    descInnerDiv.classList.add("desc-inner");
-    this.descInner = descInnerDiv;
-
-    descDiv.append(descOuterDiv, descInnerDiv);
-    container!.append(descDiv);
+    this.desc = createDescription();
+    container!.append(this.desc);
   }
   /**
    * initialize in root.
@@ -67,31 +47,50 @@ class Element2D {
       throw new Error("You should initialize the instance. call 'Element2D.init(sizes, container)' first");
     }
   }
-  getDescOuter = () => this.descOuter;
+  getIntro = () => this.intro;
 
-  getDescInner = () => this.descInner;
+  getProgress = () => this.intro.children[0];
+
+  getDescOuter = () => this.desc.children[0];
+
+  getDescInner = () => this.desc.children[1];
 
   showTooltip = (starName: string, position: Vector3) => {
     const { width, height } = this.sizes.getSizes();
     const translateX = position.x * width * 0.5;
     const translateY = -position.y * height * 0.5;
-    this.tooltip.classList.remove("hidden");
-    this.tooltip.classList.add("visible");
-    this.tooltipText.innerText = starName.toUpperCase();
+    this.tooltip.children[0].innerHTML = starName.toUpperCase();
     this.tooltip.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`;
+    this.tooltip.style.display = "block";
   };
 
   hideTooltip = () => {
-    this.tooltip.classList.remove("visible");
-    this.tooltip.classList.add("hidden");
+    this.tooltip.style.display = "none";
   };
 
   showDesc = (mesh: Mesh) => {
     this.desc.style.display = "flex";
+    const title = document.getElementById("title");
+    const spec = document.getElementById("spec");
+    const summary = document.getElementById("summary");
+    title!.innerHTML = mesh.name.toUpperCase();
+    const { userData } = mesh;
+    spec!.innerHTML = `
+    - Distance from sun: ${userData.distanceToSun} AU <br />
+    - Orbital period: ${userData.period.orbital} day <br />
+    - Rotation period: ${userData.period.rotation} day <br />
+    - Radius: ${userData.radius} km <br />
+    - Orbital inclination : ${userData.inclinationFromSun} degree
+    `;
+    summary!.innerHTML = userData.summary;
   };
 
   hideDesc = () => {
     this.desc.style.display = "none";
+  };
+
+  hideIntro = () => {
+    this.intro.style.display = "none";
   };
 }
 

@@ -131,6 +131,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+button {
+  background: transparent;
+  outline: none;
+  color: inherit;
+  font-size: inherit;
+}
 
 #solarsystem {
   position: fixed;

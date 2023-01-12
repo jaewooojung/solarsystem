@@ -1,0 +1,63 @@
+.intro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0;
+  background: black;
+}
+
+@keyframes fadein-spiral {
+  from {
+    opacity: 0.3;
+    transform: scale(0.3);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.progress {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: white;
+  border: 1px solid rgba(235, 232, 52, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  transform: scale(0.3);
+  animation: 0.7s fadein-spiral cubic-bezier(1, -0.01, 0.53, 0.79) forwards;
+}
+
+.progress::before {
+  content: "";
+  position: absolute;
+  inset: 1%;
+  border: 1px solid rgba(235, 232, 52, 0.3);
+  border-radius: 50%;
+}
+
+.progress::after {
+  content: "";
+  position: absolute;
+  inset: 2%;
+  border: 1px solid rgba(235, 232, 52, 0.1);
+  border-radius: 50%;
+}
+
+.progress:hover {
+  border-color: white;
+}
+
+.progress span {
+}
+
+.progress button {
+  width: 50%;
+}

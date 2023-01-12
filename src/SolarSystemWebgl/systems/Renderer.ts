@@ -18,7 +18,7 @@ class Renderer {
     // renderer.shadowMap.type = PCFShadowMap;
   }
 
-  getInstance() {
+  getRenderer() {
     return this.instance;
   }
 

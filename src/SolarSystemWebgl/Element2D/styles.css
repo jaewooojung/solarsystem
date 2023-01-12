@@ -52,23 +52,24 @@
   display: none;
   justify-content: flex-end;
   inset: 0;
-  /* 반응형 */
 }
 
 .desc-outer {
-  z-index: 99;
   width: 100%;
   height: 100%;
 }
 
 .desc-inner {
   width: 30%;
-  background-color: red;
+  background-color: rgb(5, 10, 12);
 }
 
 @media (max-width: 768px) {
-  .desc {
-    width: 90%;
+  .desc-outer {
+    width: 20%;
+  }
+  .desc-inner {
+    width: 80%;
   }
 }
 
@@ -84,4 +85,73 @@
 
 .flex {
   display: flex;
+}
+
+/* loading */
+
+.intro {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  inset: 0;
+  background: black;
+}
+
+@keyframes fadein-spiral {
+  from {
+    opacity: 0.3;
+    transform: scale(0.3);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.progress {
+  position: relative;
+  width: 300px;
+  height: 300px;
+  font-size: 30px;
+  color: white;
+  border: 1px solid rgba(235, 232, 52, 0.7);
+  border-radius: 50%;
+  cursor: pointer;
+  transform: scale(0.3);
+  animation: 0.7s fadein-spiral cubic-bezier(1, -0.01, 0.53, 0.79) forwards;
+}
+
+.progress::before {
+  content: "";
+  position: absolute;
+  inset: 1%;
+  border: 1px solid rgba(235, 232, 52, 0.3);
+  border-radius: 50%;
+}
+
+.progress::after {
+  content: "";
+  position: absolute;
+  inset: 2%;
+  border: 1px solid rgba(235, 232, 52, 0.1);
+  border-radius: 50%;
+}
+
+.progress:hover {
+  border-color: white;
+}
+
+.progress span {
+}
+
+.progress button {
+  width: 50%;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

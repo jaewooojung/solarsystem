@@ -1,31 +1,33 @@
 import { AmbientLight, Group, Mesh, PointLight, PointLightHelper, Vector3 } from "three";
-import Loder from "../systems/Loader";
-import Cursor from "../systems/Cursor";
+import Cursor from "../systems/singletons/Cursor";
 import createStars from "./stars/createStars";
 import { createOrbitLine } from "./orbits";
 import { createBackground } from "./background";
 import { getStarDatas } from "./stars/datas";
 import { Tick } from "../../types";
+import Loader from "../systems/singletons/Loader";
 
 class World {
   private instance: Group;
-  private loader: Loder;
   private cursor: Cursor;
   private updatables: Array<Tick>;
 
-  constructor(loder: Loder, cursor: Cursor) {
+  constructor() {
     this.instance = new Group();
-    this.loader = loder;
-    this.cursor = cursor;
+    this.cursor = Cursor.getInstance();
     this.updatables = [];
   }
 
   init = async () => {
+    // texture Loading
+    await Loader.getInstance().load();
+
     const starDatas = getStarDatas(true);
 
     // Stars
-    const stars = await createStars(starDatas, this.loader);
+    const { stars, starsTick } = await createStars(starDatas);
     this.instance.add(...stars);
+    this.updatables.push(starsTick);
 
     // OrbitLine
     /**
@@ -35,7 +37,7 @@ class World {
     this.instance.add(...orbitLines);
 
     // Background
-    const background = await createBackground(this.loader);
+    const background = await createBackground();
     this.instance.add(background);
 
     // Light
@@ -45,30 +47,7 @@ class World {
     const pointLightHelper = new PointLightHelper(pointLight);
     this.instance.add(pointLight, pointLightHelper);
 
-    // Tick - selfrotation and orbitrotation of stars
-    /**
-     * 자전. 1 round per 'period.rotation(sec)'
-     */
-    const selfRotation: Tick = (elapsed, delta) => {
-      stars.forEach((s) => {
-        s.rotateY(((2 * Math.PI) / s.userData.period.rotation) * delta * -1);
-      });
-    };
-    /**
-     * 공전. 1 round per 'orbitalRotaionRadianPerSecond(sec)'
-     */
-    const orbitRotation: Tick = (elapsed, delta) => {
-      stars.slice(1).forEach((s) => {
-        const orbitRotationPerFrame = s.userData.orbitalRotaionRadianPerSecond! * elapsed;
-        const positionX = Math.sin(orbitRotationPerFrame) * s.userData.distanceToSun;
-        s.position.x = positionX;
-        s.position.z = Math.cos(orbitRotationPerFrame) * s.userData.distanceToSun;
-        s.position.y = positionX * s.userData.tangent_inclinationFromSun!;
-      });
-    };
-    this.updatables.push(selfRotation, orbitRotation);
-
-    // Tick - tooltip
+    // World Tick
     const checkIntersections = () => {
       if (this.cursor.getClicked() !== null) {
         return;

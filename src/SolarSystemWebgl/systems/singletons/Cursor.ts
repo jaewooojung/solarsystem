@@ -2,10 +2,11 @@ import { Mesh, PerspectiveCamera, Raycaster, Vector2, Vector3 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import gsap from "gsap";
 
-import Element2D from "../Element2D";
-import Sizes from "./Sizes";
+import Element2D from "../../Element2D";
+import Sizes from "../Sizes";
 
 class Cursor {
+  private static instance: Cursor;
   private coordinate: Vector2;
   private raycaster: Raycaster;
   private camera: PerspectiveCamera;
@@ -14,7 +15,13 @@ class Cursor {
   private isAnimating: boolean;
   private element2D: Element2D;
 
-  constructor(sizes: Sizes, camera: PerspectiveCamera, container: HTMLDivElement, controls: OrbitControls) {
+  private constructor(
+    sizes: Sizes,
+    camera: PerspectiveCamera,
+    controls: OrbitControls,
+    container: HTMLDivElement,
+    startLoop: () => void
+  ) {
     this.coordinate = new Vector2(2, 2); // 초기값: 화면 밖.
     this.raycaster = new Raycaster();
     this.camera = camera;
@@ -62,15 +69,50 @@ class Cursor {
       }
     });
 
-    this.element2D.getDescOuter().addEventListener("click", (event: MouseEvent) => {
+    this.element2D.getDescOuter().addEventListener("click", (event) => {
       event.stopPropagation();
       this.element2D.hideDesc();
       this.clicked = null;
     });
 
-    this.element2D.getDescInner().addEventListener("click", (event: MouseEvent) => {
+    this.element2D.getDescInner().addEventListener("click", (event) => {
       event.stopPropagation();
     });
+
+    this.element2D.getProgress().addEventListener("click", (event) => {
+      this.element2D.getIntro().remove();
+      startLoop();
+      gsap.timeline({}).to(this.camera.position, {
+        duration: 2,
+        x: 20,
+        y: 20,
+        z: 20,
+      });
+    });
+  }
+
+  static init(
+    sizes: Sizes,
+    camera: PerspectiveCamera,
+    controls: OrbitControls,
+    container: HTMLDivElement,
+    startLoop: () => void
+  ) {
+    if (!Cursor.instance) {
+      Cursor.instance = new Cursor(sizes, camera, controls, container, startLoop);
+    }
+  }
+  /**
+   * get the instance. no initialization.
+   */
+  static getInstance() {
+    if (Cursor.instance) {
+      return Cursor.instance;
+    } else {
+      throw new Error(
+        "You should initialize the instance. call 'Cursor.init(sizes, camera, controls, container)' first"
+      );
+    }
   }
 
   getHovered = () => this.hovered;
