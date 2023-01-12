@@ -1,5 +1,5 @@
 import { PerspectiveCamera } from "three";
-import Sizes from "./sizes";
+import Sizes from "./Sizes";
 
 class MainCamera {
   private instance: PerspectiveCamera;
