@@ -3,9 +3,9 @@ import { CineonToneMapping, PerspectiveCamera, Scene, sRGBEncoding, WebGLRendere
 class Renderer {
   private instance: WebGLRenderer;
   private scene: Scene;
-  private mainCameraInstance: PerspectiveCamera;
+  private camera: PerspectiveCamera;
 
-  constructor(scene: Scene, mainCameraInstance: PerspectiveCamera) {
+  constructor(scene: Scene, camera: PerspectiveCamera) {
     this.instance = new WebGLRenderer({ antialias: true });
     this.instance.physicallyCorrectLights = true;
     this.instance.outputEncoding = sRGBEncoding;
@@ -13,7 +13,7 @@ class Renderer {
     this.instance.toneMapping = CineonToneMapping;
     // this.instance.toneMappingExposure = 2;
     this.scene = scene;
-    this.mainCameraInstance = mainCameraInstance;
+    this.camera = camera;
     // renderer.shadowMap.enabled = true;
     // renderer.shadowMap.type = PCFShadowMap;
   }
@@ -28,7 +28,7 @@ class Renderer {
   }
 
   render() {
-    this.instance.render(this.scene, this.mainCameraInstance);
+    this.instance.render(this.scene, this.camera);
   }
 
   stop() {

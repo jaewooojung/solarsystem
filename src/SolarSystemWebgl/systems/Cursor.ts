@@ -13,6 +13,7 @@ class Cursor {
   private clicked: Mesh | null;
   private isAnimating: boolean;
   private element2D: Element2D;
+
   constructor(sizes: Sizes, camera: PerspectiveCamera, container: HTMLDivElement, controls: OrbitControls) {
     this.coordinate = new Vector2(2, 2); // 초기값: 화면 밖.
     this.raycaster = new Raycaster();
@@ -43,6 +44,7 @@ class Cursor {
                 this.isAnimating = true;
                 controls.enabled = false;
                 this.clicked = this.hovered;
+                this.removeHovered();
                 this.element2D.showDesc(this.clicked!);
               },
               onUpdate: () => {},

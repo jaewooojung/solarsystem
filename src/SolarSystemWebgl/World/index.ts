@@ -11,15 +11,6 @@ class World {
   private instance: Group;
   private loader: Loder;
   private cursor: Cursor;
-  private stars!: {
-    sun: Mesh;
-    mercury: Mesh;
-    venus: Mesh;
-    earth: Mesh;
-    mars: Mesh;
-    jupiter: Mesh;
-    saturn: Mesh;
-  };
   private updatables: Array<Tick>;
 
   constructor(loder: Loder, cursor: Cursor) {
@@ -77,7 +68,7 @@ class World {
     };
     this.updatables.push(selfRotation, orbitRotation);
 
-    // tick - tooltip
+    // Tick - tooltip
     const checkIntersections = () => {
       if (this.cursor.getClicked() !== null) {
         return;

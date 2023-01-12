@@ -2,6 +2,9 @@ import { AxesHelper } from "three";
 import GUI from "lil-gui";
 import * as Stats from "stats.js";
 
+/**
+ * singleton
+ */
 class Debugger {
   private static instance: Debugger;
   private gui: GUI;
