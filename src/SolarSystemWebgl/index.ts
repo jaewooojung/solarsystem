@@ -9,7 +9,7 @@ import Loader from "./systems/Loader";
 import MainCamera from "./systems/MainCamera";
 import Renderer from "./systems/Renderer";
 import { createScene } from "./systems/scene";
-import Sizes from "./systems/sizes";
+import Sizes from "./systems/Sizes";
 import World from "./World";
 
 class SolarSystemWebgl {
