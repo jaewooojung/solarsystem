@@ -3,14 +3,13 @@ import Sizes from "../systems/Sizes";
 import createDescription from "./description";
 import createIntro from "./intro";
 import createTooltip from "./tooltip";
-import "./styles/index.css";
 
 class Element2D {
   private sizes: Sizes;
   private intro: HTMLDivElement;
   private tooltip: HTMLDivElement;
   private desc: HTMLDivElement;
-  constructor(sizes: Sizes, container: HTMLDivElement) {
+  constructor(container: HTMLDivElement, sizes: Sizes) {
     this.sizes = sizes;
 
     // loading

@@ -1,3 +1,5 @@
+import "./styles.css";
+
 export default function createTooltip() {
   const tooltipDiv = document.createElement("div");
   tooltipDiv.classList.add("tooltip");

@@ -1,3 +1,5 @@
+import "./styles.css";
+
 export default function createDescription() {
   const descDiv = document.createElement("div");
   descDiv.classList.add("desc");

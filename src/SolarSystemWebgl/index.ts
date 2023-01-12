@@ -26,20 +26,19 @@ class SolarSystemWebgl {
     this.scene = createScene();
     const loader = new Loader();
     this.sizes = new Sizes(container);
-    const element2D = new Element2D(this.sizes, container);
-
+    const element2D = new Element2D(container, this.sizes);
     this.mainCamera = new MainCamera(this.sizes);
     this.renderer = new Renderer(this.scene, this.mainCamera.getCamera());
     const canvas = this.renderer.getRenderer().domElement;
     container.append(canvas);
     this.mainControl = createOrbitContols(this.mainCamera.getCamera(), canvas);
     const cursor = new Cursor(
+      container,
       this.sizes,
+      element2D,
       this.mainCamera.getCamera(),
       this.mainControl,
-      container,
-      this.onClickStart,
-      element2D
+      this.onClickStart
     );
     this.world = new World(loader, cursor);
     this.world.init();

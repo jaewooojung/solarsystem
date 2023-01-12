@@ -1,4 +1,5 @@
 import { DefaultLoadingManager } from "three";
+import "./styles.css";
 
 export default function createIntro() {
   const introDiv = document.createElement("div");

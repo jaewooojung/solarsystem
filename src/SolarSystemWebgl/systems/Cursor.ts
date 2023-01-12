@@ -15,12 +15,12 @@ class Cursor {
   private element2D: Element2D;
 
   constructor(
+    container: HTMLDivElement,
     sizes: Sizes,
+    element2D: Element2D,
     camera: PerspectiveCamera,
     controls: OrbitControls,
-    container: HTMLDivElement,
-    onClickStart: () => void,
-    element2D: Element2D
+    onClickStart: () => void
   ) {
     this.coordinate = new Vector2(2, 2); // 초기값: 화면 밖.
     this.raycaster = new Raycaster();
