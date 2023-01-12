@@ -12,7 +12,7 @@ class Element2D {
   constructor(container: HTMLDivElement, sizes: Sizes) {
     this.sizes = sizes;
 
-    // loading
+    // intro
     this.intro = createIntro();
     container!.append(this.intro);
 
@@ -27,16 +27,12 @@ class Element2D {
 
   getIntro = () => this.intro;
 
-  getProgress = () => this.intro.children[0];
+  getDesc = () => this.desc;
 
-  getDescOuter = () => this.desc.children[0];
-
-  getDescInner = () => this.desc.children[1];
-
-  showTooltip = (starName: string, position: Vector3) => {
+  showTooltip = (starName: string, projectedPosition: Vector3) => {
     const { width, height } = this.sizes.getSizes();
-    const translateX = position.x * width * 0.5;
-    const translateY = -position.y * height * 0.5;
+    const translateX = projectedPosition.x * width * 0.5;
+    const translateY = -projectedPosition.y * height * 0.5;
     this.tooltip.children[0].innerHTML = starName.toUpperCase();
     this.tooltip.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`;
     this.tooltip.style.display = "block";
@@ -65,10 +61,6 @@ class Element2D {
 
   hideDesc = () => {
     this.desc.style.display = "none";
-  };
-
-  hideIntro = () => {
-    this.intro.style.display = "none";
   };
 
   removeIntro = () => this.intro.remove();

@@ -21,7 +21,7 @@
   position: absolute;
   inset: 0 0 95% 0;
   background-color: rgba(30, 20, 20, 0.8);
-  animation: 0.5s slidein;
+  animation: 0.3s slidein;
 }
 
 @keyframes slidedown {
@@ -41,5 +41,5 @@
   cursor: default;
   background-color: rgba(30, 20, 20, 0.2);
   transform: translateY(-100%);
-  animation: 0.3s slidedown 0.5s forwards ease-out;
+  animation: 0.3s slidedown 0.3s forwards ease-out;
 }

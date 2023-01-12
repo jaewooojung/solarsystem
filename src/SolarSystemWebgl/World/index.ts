@@ -6,17 +6,22 @@ import createBackground from "./background";
 import { getStarDatas } from "./stars/datas";
 import { Tick } from "../../types";
 import Loader from "../systems/Loader";
+import Element2D from "../Element2D";
 
 class World {
   private instance: Group;
   private loader: Loader;
   private cursor: Cursor;
+  private element2D: Element2D;
+  private onClickStart: () => void;
   private updatables: Array<Tick>;
 
-  constructor(loader: Loader, cursor: Cursor) {
+  constructor(loader: Loader, cursor: Cursor, element2D: Element2D, onClickStart: () => void) {
     this.instance = new Group();
     this.loader = loader;
     this.cursor = cursor;
+    this.element2D = element2D;
+    this.onClickStart = onClickStart;
     this.updatables = [];
   }
 
@@ -49,8 +54,8 @@ class World {
     this.instance.add(pointLight, pointLightHelper);
 
     // World Tick
-    const checkIntersections = () => {
-      if (this.cursor.getClicked() !== null) {
+    const checkHover = () => {
+      if (this.cursor.getClicked()) {
         return;
       }
       const raycaster = this.cursor.prepareRaycaster();
@@ -59,26 +64,46 @@ class World {
       if (intersects.length > 0) {
         const newHovered = intersects[0].object as Mesh;
         if (!hovered || hovered.name !== newHovered.name) {
-          // [todo]
-          // console.log("new or change. start star animation");
+          // [todo] star(newHovered) hovered animation
         }
         this.cursor.setHovered(newHovered);
       } else {
         if (hovered) {
-          this.cursor.removeHovered();
+          this.cursor.setHovered(null);
+          this.element2D.hideTooltip();
         }
+      }
+      const clicked = this.cursor.getClicked();
+      if (hovered && !clicked) {
+        const position3D = new Vector3(0, 0, 0);
+        hovered.getWorldPosition(position3D);
+        this.cursor.projectToCamera(position3D);
+        this.element2D.showTooltip(hovered.name, position3D);
       }
     };
 
-    const showStarTooltip = () => {
-      const hovered = this.cursor.getHovered();
-      if (hovered) {
-        const position3D = new Vector3(0, 0, 0);
-        hovered.getWorldPosition(position3D);
-        this.cursor.showTooltip(hovered.name, position3D);
-      }
-    };
-    this.updatables.push(checkIntersections, showStarTooltip);
+    this.updatables.push(checkHover);
+
+    // Handling Element2D with Cursor
+    const intro = this.element2D.getIntro();
+    const progress = intro.children[0];
+    progress.addEventListener("click", (event) => {
+      this.element2D.removeIntro();
+      this.onClickStart();
+    });
+
+    const desc = this.element2D.getDesc();
+    const [descOuter, descInner] = desc.children;
+
+    descOuter.addEventListener("click", (event) => {
+      event.stopPropagation();
+      this.element2D.hideDesc();
+      this.cursor.setClicked(null);
+    });
+
+    descInner.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
   };
 
   getWorld = () => this.instance;
