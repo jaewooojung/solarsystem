@@ -64,6 +64,15 @@ class Element2D {
   };
 
   removeIntro = () => this.intro.remove();
+
+  onClickStart = () => {
+    const [title, progress] = this.intro.children;
+    const [circle1, circle2, startText] = progress.children;
+    title.classList.add("fadeout");
+    startText.classList.add("last-animation");
+    circle1.classList.add("scaleout", "transition30");
+    circle2.classList.add("scaleout", "transition30");
+  };
 }
 
 export default Element2D;

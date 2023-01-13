@@ -4,13 +4,13 @@ export default function createTooltip() {
   const tooltipDiv = document.createElement("div");
   tooltipDiv.classList.add("tooltip");
 
-  const tooltipTextDiv = document.createElement("div");
-  tooltipTextDiv.classList.add("tooltip-text");
+  const tooltipNameDiv = document.createElement("div");
+  tooltipNameDiv.classList.add("tooltip-name");
 
   const tooltipAniDiv = document.createElement("div");
   tooltipAniDiv.classList.add("tooltip-animate");
 
-  tooltipDiv.append(tooltipTextDiv);
+  tooltipDiv.append(tooltipNameDiv);
   tooltipDiv.append(tooltipAniDiv);
 
   return tooltipDiv;

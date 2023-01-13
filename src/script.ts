@@ -1,5 +1,4 @@
 import "./styles/global.css";
-import "./styles/scroll-based.css";
 
 import SolarSystemWebgl from "./SolarSystemWebgl";
 

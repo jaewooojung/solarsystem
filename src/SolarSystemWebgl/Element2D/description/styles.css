@@ -27,7 +27,6 @@
   margin: auto;
   display: flex;
   flex-direction: column;
-  color: white;
   background-color: rgb(5, 10, 12, 0.3);
   overflow-y: auto;
   transform: translateX(100%);

@@ -3,8 +3,26 @@
   top: 50%;
   left: 50%;
   display: none;
-  color: white;
   overflow: hidden;
+}
+
+@keyframes slidedown {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.tooltip-name {
+  padding: 10px 20px 10px 20px;
+  font-size: 30px;
+  cursor: default;
+  background-color: rgba(30, 20, 20, 0.2);
+  transform: translateY(-100%);
+  animation: 0.3s slidedown 0.3s forwards ease-out;
 }
 
 @keyframes slidein {
@@ -22,24 +40,4 @@
   inset: 0 0 95% 0;
   background-color: rgba(30, 20, 20, 0.8);
   animation: 0.3s slidein;
-}
-
-@keyframes slidedown {
-  from {
-    transform: translateY(-100%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
-
-.tooltip-text {
-  padding: 10px 20px 10px 20px;
-  font-size: 30px;
-  font-family: Arial, Helvetica, sans-serif;
-  cursor: default;
-  background-color: rgba(30, 20, 20, 0.2);
-  transform: translateY(-100%);
-  animation: 0.3s slidedown 0.3s forwards ease-out;
 }

@@ -61,24 +61,27 @@ class World {
       const raycaster = this.cursor.prepareRaycaster();
       const intersects = raycaster.intersectObjects(stars);
       const hovered = this.cursor.getHovered();
+      let newHovered = null;
       if (intersects.length > 0) {
-        const newHovered = intersects[0].object as Mesh;
+        newHovered = intersects[0].object as Mesh;
         if (!hovered || hovered.name !== newHovered.name) {
           // [todo] star(newHovered) hovered animation
         }
         this.cursor.setHovered(newHovered);
+        document.body.style.cursor = "pointer";
       } else {
         if (hovered) {
           this.cursor.setHovered(null);
           this.element2D.hideTooltip();
+          document.body.style.cursor = "default";
         }
       }
       const clicked = this.cursor.getClicked();
-      if (hovered && !clicked) {
+      if (newHovered && !clicked) {
         const position3D = new Vector3(0, 0, 0);
-        hovered.getWorldPosition(position3D);
+        newHovered.getWorldPosition(position3D);
         this.cursor.projectToCamera(position3D);
-        this.element2D.showTooltip(hovered.name, position3D);
+        this.element2D.showTooltip(newHovered.name, position3D);
       }
     };
 
@@ -86,8 +89,14 @@ class World {
 
     // Handling Element2D with Cursor
     const intro = this.element2D.getIntro();
-    const progress = intro.children[0];
+    const progress = intro.children[1];
+    const progressText = progress.getElementsByTagName("span")[0];
+    // click START
     progress.addEventListener("click", (event) => {
+      this.element2D.onClickStart();
+    });
+    // Detect the end of above animations
+    progressText.addEventListener("animationend", () => {
       this.element2D.removeIntro();
       this.onClickStart();
     });
