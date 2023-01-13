@@ -16,10 +16,10 @@
   }
 }
 
-.tooltip-name {
+/* name */
+.tooltip > div:nth-child(1) {
   padding: 10px 20px 10px 20px;
   font-size: 30px;
-  cursor: default;
   background-color: rgba(30, 20, 20, 0.2);
   transform: translateY(-100%);
   animation: 0.3s slidedown 0.3s forwards ease-out;
@@ -35,7 +35,8 @@
   }
 }
 
-.tooltip-animate {
+/* animated */
+.tooltip > div:nth-child(2) {
   position: absolute;
   inset: 0 0 95% 0;
   background-color: rgba(30, 20, 20, 0.8);

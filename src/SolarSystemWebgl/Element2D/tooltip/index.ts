@@ -1,17 +1,18 @@
 import "./styles.css";
 
 export default function createTooltip() {
-  const tooltipDiv = document.createElement("div");
-  tooltipDiv.classList.add("tooltip");
+  const tooltip = document.createElement("div");
+  tooltip.classList.add("tooltip");
 
-  const tooltipNameDiv = document.createElement("div");
-  tooltipNameDiv.classList.add("tooltip-name");
+  const name = document.createElement("div");
+  const nameText = document.createElement("span");
+  name.append(nameText);
+  name.classList.add("tooltip-name");
 
-  const tooltipAniDiv = document.createElement("div");
-  tooltipAniDiv.classList.add("tooltip-animate");
+  const animated = document.createElement("div");
+  animated.classList.add("tooltip-animate");
 
-  tooltipDiv.append(tooltipNameDiv);
-  tooltipDiv.append(tooltipAniDiv);
+  tooltip.append(name, animated);
 
-  return tooltipDiv;
+  return tooltip;
 }

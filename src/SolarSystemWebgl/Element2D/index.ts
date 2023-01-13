@@ -43,24 +43,25 @@ class Element2D {
   };
 
   showDesc = (mesh: Mesh) => {
-    this.desc.style.display = "flex";
-    const title = document.getElementById("title");
-    const spec = document.getElementById("spec");
-    const summary = document.getElementById("summary");
-    title!.innerHTML = mesh.name.toUpperCase();
+    const descInner = this.desc.children[1];
+    this.desc.classList.remove("display-none");
+    this.desc.classList.add("display-flex");
+    const [title, spec, summary] = descInner.children;
+    title.innerHTML = mesh.name.toUpperCase();
     const { userData } = mesh;
-    spec!.innerHTML = `
+    spec.innerHTML = `
     - Distance from sun: ${userData.distanceToSun} AU <br />
     - Orbital period: ${userData.period.orbital} day <br />
     - Rotation period: ${userData.period.rotation} day <br />
     - Radius: ${userData.radius} km <br />
     - Orbital inclination : ${userData.inclinationFromSun} degree
     `;
-    summary!.innerHTML = userData.summary;
+    summary.innerHTML = userData.summary;
   };
 
   hideDesc = () => {
-    this.desc.style.display = "none";
+    this.desc.classList.remove("display-flex");
+    this.desc.classList.add("display-none");
   };
 
   removeIntro = () => this.intro.remove();
@@ -68,10 +69,12 @@ class Element2D {
   onClickStart = () => {
     const [title, progress] = this.intro.children;
     const [circle1, circle2, startText] = progress.children;
-    title.classList.add("fadeout");
+    title.classList.add("transition-30", "opacity-0");
     startText.classList.add("last-animation");
-    circle1.classList.add("scaleout", "transition30");
-    circle2.classList.add("scaleout", "transition30");
+    circle1.classList.remove("transition-04");
+    circle2.classList.remove("transition-04");
+    circle1.classList.add("scaleout-circle");
+    circle2.classList.add("scaleout-circle");
   };
 }
 

@@ -1,0 +1,51 @@
+.border-width-1 {
+  border-width: 1px;
+}
+
+.border-width-3 {
+  border-width: 3px;
+}
+
+.border-blue {
+  border-color: rgba(0, 84, 166, 0.9);
+}
+
+.border-purple {
+  border-color: rgb(149, 83, 229, 0.7);
+}
+
+.display-flex {
+  display: flex;
+}
+
+.display-none {
+  display: none;
+}
+
+.opacity-0 {
+  opacity: 0;
+}
+
+.opacity-80 {
+  opacity: 0.8;
+}
+
+.opacity-100 {
+  opacity: 100;
+}
+
+.point-events-none {
+  pointer-events: none;
+}
+
+.rotateZ45 {
+  transform: rotateZ(45deg);
+}
+
+.transition-04 {
+  transition: all 0.4s;
+}
+
+.transition-30 {
+  transition: all 3s;
+}

@@ -13,6 +13,9 @@ import Sizes from "./systems/Sizes";
 import Element2D from "./Element2D";
 import World from "./World";
 
+import "../styles/global.css";
+import "../styles/common.css";
+
 class SolarSystemWebgl {
   private scene: Scene;
   private sizes: Sizes;

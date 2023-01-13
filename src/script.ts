@@ -1,5 +1,3 @@
-import "./styles/global.css";
-
 import SolarSystemWebgl from "./SolarSystemWebgl";
 
 function init() {
