@@ -43,7 +43,6 @@ class SolarSystemWebgl {
 
     this.scene.add(this.mainCamera.getCamera(), this.world.getWorld());
 
-    console.log("env", process.env.NODE_ENV);
     if (process.env.NODE_ENV === "development") {
       this.scene.add(...DevOnly.getInstance().getHelpers());
     }

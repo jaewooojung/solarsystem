@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "webpack serve --config ./bundler/webpack.dev.js",
     "build": "webpack --config ./bundler/webpack.prod.js",
-    "serve": "webpack serve --config ./bundler/webpack.prod.js"
+    "serve": "webpack serve --config ./bundler/webpack.prod.js",
+    "deploy": "vercel --prod"
   },
   "author": "",
   "license": "ISC",
@@ -33,6 +34,7 @@
     "stats.js": "^0.17.0",
     "style-loader": "^3.3.1",
     "ts-loader": "^9.4.2",
+    "vercel": "^28.12.4",
     "webpack": "^5.75.0",
     "webpack-cli": "^5.0.1",
     "webpack-dev-server": "^4.11.1",
