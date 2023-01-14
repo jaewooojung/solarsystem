@@ -2,5 +2,7 @@
 
 solar system based by celestial mechanics.
 
--Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn(태양,수금지화목토)
-textures from https://www.solarsystemscope.com/
+https://solarsystem-seven.vercel.app/
+
+-textures from https://www.solarsystemscope.com/
+(Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn(태양,수금지화목토))
