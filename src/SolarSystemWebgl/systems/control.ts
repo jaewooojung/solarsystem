@@ -3,7 +3,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 function createOrbitContols(camera: PerspectiveCamera, container: HTMLCanvasElement) {
   const orbitControls = new OrbitControls(camera, container);
-  // orbitControls.enableDamping = true;
+  orbitControls.enabled = false;
   return orbitControls;
 }
 

@@ -69,7 +69,7 @@ class Element2D {
   onClickStart = () => {
     const [title, progress] = this.intro.children;
     const [circle1, circle2, startText] = progress.children;
-    title.classList.add("transition-30", "opacity-0");
+    title.classList.add("transition-30", "transition-delay-15", "opacity-0");
     startText.classList.add("last-animation");
     circle1.classList.remove("transition-04");
     circle2.classList.remove("transition-04");

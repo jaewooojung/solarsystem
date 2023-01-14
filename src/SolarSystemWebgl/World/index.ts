@@ -7,6 +7,7 @@ import { getStarDatas } from "./stars/datas";
 import { Tick } from "../../types";
 import Loader from "../systems/Loader";
 import Element2D from "../Element2D";
+import gsap from "gsap";
 
 class World {
   private instance: Group;
@@ -43,8 +44,8 @@ class World {
     this.instance.add(...orbitLines);
 
     // Background
-    const background = createBackground(this.loader);
-    this.instance.add(background);
+    const backgrounds = createBackground(this.loader);
+    this.instance.add(...backgrounds);
 
     // Light
     const ambientLight = new AmbientLight("white", 3);
@@ -53,7 +54,10 @@ class World {
     const pointLightHelper = new PointLightHelper(pointLight);
     this.instance.add(pointLight, pointLightHelper);
 
-    // World Tick
+    /**
+     * World Tick.
+     * Detect the stars that cursor hovered
+     */
     const checkHover = () => {
       if (this.cursor.getClicked()) {
         return;
@@ -84,21 +88,31 @@ class World {
         this.element2D.showTooltip(newHovered.name, position3D);
       }
     };
-
     this.updatables.push(checkHover);
 
-    // Handling Element2D with Cursor
+    // ----------------------- Handling Element2D with Cursor -----------------------
     const intro = this.element2D.getIntro();
     const progress = intro.children[1];
     const progressText = progress.getElementsByTagName("span")[0];
-    // click START
+
+    // When you click the start button in intro page.
     progress.addEventListener("click", (event) => {
       this.element2D.onClickStart();
     });
-    // Detect the end of above animations
+
+    // Detect the end of animations which occured by clicking the start button.
     progressText.addEventListener("animationend", () => {
       this.element2D.removeIntro();
       this.onClickStart();
+
+      // background(small stars) animation
+      backgrounds.forEach((b, i) => {
+        gsap.to(b.material, {
+          duration: 1.5,
+          delay: i * 1.5,
+          opacity: 1,
+        });
+      });
     });
 
     const desc = this.element2D.getDesc();

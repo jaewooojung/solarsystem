@@ -51,10 +51,6 @@ export default function createIntro() {
   progressText.classList.add("opacity-80", "transition-30");
   progress.append(progressText);
 
-  // const startText = document.createElement("span");
-  // startText.classList.add("opacity-80");
-  // startText.innerHTML = "START";
-
   intro.append(progress);
 
   DefaultLoadingManager.onProgress = (url, loaded, total) => {
@@ -63,8 +59,6 @@ export default function createIntro() {
     if (percentage === 100) {
       progress.classList.remove("point-events-none");
       progressText.innerHTML = "START";
-      // progress.removeChild(progressText);
-      // progress.append(startText);
     }
   };
 

@@ -1,12 +1,12 @@
-import { BufferGeometry, BufferAttribute, PointsMaterial, Points, Group, Texture } from "three";
+import { BufferGeometry, BufferAttribute, PointsMaterial, Points, Group, Texture, RGBAFormat } from "three";
 import Loader from "../../systems/Loader";
 
 const COLORS = ["#ffffff", "#b54731", "#f5d442", "#ebc7bc", "#f2dbff", "#bdba31"];
 
 export default function createBackground(loader: Loader) {
   const parameters = {
-    count: 50,
-    radius: 2000,
+    count: 200,
+    radius: 2500,
   };
   const textures = loader.getTextures().smallStars;
 
@@ -32,16 +32,15 @@ export default function createBackground(loader: Loader) {
   const getMaterial = (texture: Texture, color: string) =>
     new PointsMaterial({
       size: 50,
-      fog: false,
       color,
       sizeAttenuation: true,
       alphaMap: texture,
+      alphaToCoverage: false,
       transparent: true,
       alphaTest: 0.01,
       depthTest: true,
+      opacity: 0,
     });
   const backgrounds = textures.map((t, i) => new Points(getGeometry(), getMaterial(t, COLORS[i])));
-  const group = new Group();
-  group.add(...backgrounds);
-  return group;
+  return backgrounds;
 }

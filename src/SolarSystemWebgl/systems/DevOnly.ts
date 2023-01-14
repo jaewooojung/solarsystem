@@ -3,10 +3,12 @@ import GUI from "lil-gui";
 import * as Stats from "stats.js";
 
 /**
- * singleton
+ * singleton.
+ * initialized once in the root.
+ * You can import and use instance anywhere in the application.
  */
-class Debugger {
-  private static instance: Debugger;
+class DevOnly {
+  private static instance: DevOnly;
   private gui: GUI;
   private axesHelper: AxesHelper;
   private stats: any;
@@ -26,7 +28,7 @@ class Debugger {
     if (this.instance) {
       return this.instance;
     } else {
-      this.instance = new Debugger();
+      this.instance = new DevOnly();
       return this.instance;
     }
   }
@@ -41,4 +43,4 @@ class Debugger {
   }
 }
 
-export default Debugger;
+export default DevOnly;

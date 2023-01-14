@@ -7,11 +7,11 @@
 }
 
 .border-blue {
-  border-color: rgba(0, 84, 166, 0.9);
+  border-color: var(--color-blue);
 }
 
 .border-purple {
-  border-color: rgb(149, 83, 229, 0.7);
+  border-color: var(--color-purple);
 }
 
 .display-flex {
@@ -48,4 +48,8 @@
 
 .transition-30 {
   transition: all 3s;
+}
+
+.transition-delay-15 {
+  transition-delay: 1.5s;
 }

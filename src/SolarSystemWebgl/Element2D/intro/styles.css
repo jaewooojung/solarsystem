@@ -133,14 +133,11 @@
   0% {
     opacity: 1;
   }
-  50% {
-    opacity: 0.3;
-  }
   100% {
     opacity: 0;
   }
 }
 
 .last-animation {
-  animation: 3s fadeout forwards;
+  animation: 1.5s fadeout 1.5s forwards;
 }

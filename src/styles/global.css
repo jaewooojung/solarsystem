@@ -149,4 +149,6 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  --color-blue: rgba(0, 84, 166, 0.9);
+  --color-purple: rgb(149, 83, 229, 0.7);
 }

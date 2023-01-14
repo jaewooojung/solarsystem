@@ -1,10 +1,10 @@
 import { Clock, Mesh, Scene } from "three";
-import gsap from "gsap";
+import gsap, { Linear } from "gsap";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import { createOrbitContols } from "./systems/control";
 import Cursor from "./systems/Cursor";
-import Debugger from "./systems/Debugger";
+import DevOnly from "./systems/DevOnly";
 import Loader from "./systems/Loader";
 import MainCamera from "./systems/MainCamera";
 import Renderer from "./systems/Renderer";
@@ -41,7 +41,12 @@ class SolarSystemWebgl {
     this.world = new World(loader, cursor, element2D, this.onClickStart);
     this.world.init();
 
-    this.scene.add(this.mainCamera.getCamera(), this.world.getWorld(), ...Debugger.getInstance().getHelpers());
+    this.scene.add(this.mainCamera.getCamera(), this.world.getWorld());
+
+    console.log("env", process.env.NODE_ENV);
+    if (process.env.NODE_ENV === "development") {
+      this.scene.add(...DevOnly.getInstance().getHelpers());
+    }
 
     this.clock = new Clock();
 
@@ -50,6 +55,7 @@ class SolarSystemWebgl {
       this.onResize();
     });
 
+    // Set Cursor coordinate.
     container.addEventListener("mousemove", (event) => {
       const { width, height } = this.sizes.getSizes();
       const x = (event.clientX / width) * 2 - 1;
@@ -57,6 +63,7 @@ class SolarSystemWebgl {
       cursor.setCoordinate(x, y);
     });
 
+    // When you click on a star.
     container.addEventListener("click", (event) => {
       const isCameraMoving = cursor.getIsCameraMoving();
       if (isCameraMoving) {
@@ -77,6 +84,7 @@ class SolarSystemWebgl {
                 cursor.setClicked(clicked);
                 element2D.hideTooltip();
                 element2D.showDesc(clicked);
+                document.body.style.cursor = "default";
               },
               onUpdate: () => {},
               onComplete: () => {
@@ -94,22 +102,39 @@ class SolarSystemWebgl {
     });
   }
 
-  onResize = () => {
+  private onResize = () => {
     const { width, height, pixelRatio } = this.sizes.onResize();
     this.mainCamera.onResize(width, height);
     this.renderer.onResize(width, height, pixelRatio);
   };
 
-  render = () => {
+  private render = () => {
     this.renderer.render();
   };
 
-  onClickStart = () => {
-    gsap.timeline({}).to(this.mainCamera.getCamera().position, {
+  /**
+   * It will be triggered by World.
+   */
+  private onClickStart = () => {
+    const cameraPosition = this.mainCamera.getCamera().position;
+    const tl = gsap.timeline({
+      onComplete: () => {
+        this.controls.enabled = true;
+        this.controls.saveState();
+      },
+    });
+    tl.to(cameraPosition, {
+      duration: 8,
+      delay: 10,
+      ease: "sine.out",
+      x: 50,
+      y: 50,
+    });
+    tl.to(cameraPosition, {
       duration: 2,
-      x: 20,
-      y: 20,
-      z: 20,
+      ease: Linear.easeOut,
+      x: -50,
+      z: 50,
     });
     this.renderer.getRenderer().setAnimationLoop(() => {
       const elapsed = this.clock.getElapsedTime();
@@ -121,22 +146,30 @@ class SolarSystemWebgl {
 
       // update
       this.controls.update();
-      Debugger.getInstance().getStats().update();
+      if (process.env.NODE_ENV === "development") {
+        DevOnly.getInstance().getStats().update();
+      }
 
       this.render();
     });
   };
 
+  load = () => {
+    this.render();
+  };
+
+  /**
+   * [todo] Do not use yet.
+   */
   stop = () => {
     this.renderer.stop();
   };
 
+  /**
+   * [todo] Do not use yet.
+   */
   resetView = () => {
     this.controls.reset();
-  };
-
-  load = () => {
-    this.render();
   };
 }
 
