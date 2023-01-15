@@ -37,6 +37,15 @@
   background-color: black;
 }
 
+@media (max-width: 768px) {
+  .desc > div:nth-child(1) {
+    width: 20%;
+  }
+  .desc > div:nth-child(2) {
+    width: 80%;
+  }
+}
+
 /* star name */
 .desc > div:nth-child(2) > div:nth-child(1) {
   min-height: 200px;
@@ -65,14 +74,5 @@
 
   to {
     transform: translateX(0);
-  }
-}
-
-@media (max-width: 768px) {
-  .desc-outer {
-    width: 20%;
-  }
-  .desc-inner {
-    width: 80%;
   }
 }
